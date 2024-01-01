@@ -1,12 +1,12 @@
 import Search from "./components/Search";
 import List from "./components/List";
 import Item from "./components/Item";
+import { useState } from "react";
 const title = "Hello Programmer";
 const welcome = {
   greeting: "hi",
   title: "React",
 };
-
 
 
 const App=()=> {
@@ -28,14 +28,24 @@ const App=()=> {
       points: 10,
     },
   ];
+  
+  const [searchTerm,setSearchTerm] =useState('react');
+  const handlerSearch=(event)=>{
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
+  }
+
+  const searchedStories=stories.filter((story)=>
+    story.title.includes(searchTerm));
+
   return (
     <div>
       <h1>
         {welcome.greeting}
         {welcome.title}
       </h1>
-      <Search/>
-     <List list={stories}/>
+      <Search Search={searchTerm} onSearch={handlerSearch}/>
+     <List list={searchedStories}/>
     </div>
   );
 }
