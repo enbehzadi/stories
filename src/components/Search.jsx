@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Search=(props)=>{
   //let searchTerm='';
@@ -10,6 +10,7 @@ const Search=(props)=>{
     props.onSearch(event);
     //searchTerm=event.target.value;
   }
+
   
   return(
     <div>
