@@ -1,10 +1,12 @@
-import Search from "./components/Search";
+import Search from "./components/InputWhitLable";
 import List from "./components/List";
 import Item from "./components/Item";
-import { useState } from "react";
+import { useRef, useState } from "react";
+
 import { createContext, useEffect, useContext, useReducer } from 'react';
 
 import useStorageState from "./hooks/useStorageState";
+import InputWhitLable from "./components/InputWhitLable";
 
 const title = "Hello Programmer";
 const welcome = {
@@ -31,7 +33,7 @@ const App=()=> {
     },
   ];
   
-  
+
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const handlerSearch=(event)=>{
     console.log(event.target.value);
@@ -47,13 +49,14 @@ const App=()=> {
   const searchedStories=stories.filter((story)=>
     story.title.includes(searchTerm));
 
+    const inputRef=useRef();
   return (
     <div>
       <h1>
         {welcome.greeting}
         {welcome.title}
       </h1>
-      <Search Search={searchTerm} onSearch={handlerSearch}/>
+      <InputWhitLable id="search"  label="Search"  Value={searchTerm} onInputChange={handlerSearch} isFocused={true}/>
      <List list={searchedStories}/>
     </div>
   );
