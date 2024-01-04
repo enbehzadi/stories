@@ -14,7 +14,7 @@ const welcome = {
   title: "React",
 };
 const App=()=> {
-  const stories = [
+  const InitialStories = [
     {
       id: "0",
       title: "React",
@@ -32,8 +32,7 @@ const App=()=> {
       points: 10,
     },
   ];
-  
-
+  const [stories,setStories] =useState(InitialStories);
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const handlerSearch=(event)=>{
     console.log(event.target.value);
@@ -41,7 +40,10 @@ const App=()=> {
   }
   
 
-  
+  const handelRemoveStory=(id)=>{
+    const newStories=stories.filter(story=>story.id!==id);
+    setStories(newStories);
+  }
   useEffect(() => {
     localStorage.setItem("search",searchTerm);
   }, [searchTerm])
@@ -56,8 +58,9 @@ const App=()=> {
         {welcome.greeting}
         {welcome.title}
       </h1>
+      
       <InputWhitLable id="search"  label="Search"  Value={searchTerm} onInputChange={handlerSearch} isFocused={true}/>
-     <List list={searchedStories}/>
+     <List list={searchedStories} onRemoveItem={handelRemoveStory} />
     </div>
   );
 }

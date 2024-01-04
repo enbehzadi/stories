@@ -1,18 +1,23 @@
-const Item=(props)=>{
+const Item=({id,title,url,author,num_comments,points,onRemoveItem})=>{
+
+  const handleRemoveItem=()=>{
+    onRemoveItem(id)
+  }
   return(
     <li >
         <span>
-          <a href={props.item.url}>{props.item.title}</a>
+          <a href={url}>{title}</a>
         </span>
         <span>
-         {props.item.author}
+         {author}
         </span>
         <span>
-         {props.item.num_comments}
+         {num_comments}
         </span>
         <span>
-         {props.item.points}
+         {points}
         </span> 
+        <button onClick={handleRemoveItem}>Remove</button>
 </li>
   )
 }

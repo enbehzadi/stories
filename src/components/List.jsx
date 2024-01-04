@@ -1,13 +1,15 @@
 import Item from "./Item";
-const List=(props)=>{ 
+const List=({list,onRemoveItem})=>{ +
+  console.log('list',list)
 //   useEffect(()=>{
 // console.log(props.list);
 //   },[props.list])
   return(
     <ul>
-  {props.list.map((item) => 
+  {list.map(({id,...item}) => 
+
      (
-      <Item  key={item.id} item ={item}/>
+       <Item  key={id} {...item} onRemoveItem={onRemoveItem}/>
     ))}
   </ul>
   )
