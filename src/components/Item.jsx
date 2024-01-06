@@ -1,13 +1,15 @@
 const Item=({id,title,url,author,num_comments,points,onRemoveItem})=>{
-
-  const handleRemoveItem=()=>{
-    onRemoveItem(id)
-  }
+  // console.log(id);
+const onDelete=()=>{
+  // console.log(id);
+  onRemoveItem(id)
+}
   return(
-    <li >
+    <li>
         <span>
           <a href={url}>{title}</a>
         </span>
+       
         <span>
          {author}
         </span>
@@ -17,7 +19,7 @@ const Item=({id,title,url,author,num_comments,points,onRemoveItem})=>{
         <span>
          {points}
         </span> 
-        <button onClick={handleRemoveItem}>Remove</button>
+        <button onClick={onDelete}>Remove</button>
 </li>
   )
 }

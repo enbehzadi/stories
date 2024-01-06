@@ -6,10 +6,9 @@ const List=({list,onRemoveItem})=>{ +
 //   },[props.list])
   return(
     <ul>
-  {list.map(({id,...item}) => 
-
-     (
-       <Item  key={id} {...item} onRemoveItem={onRemoveItem}/>
+  {list.map((item) => 
+  (
+       <Item  key={item.id} {...item} onRemoveItem={onRemoveItem}/>
     ))}
   </ul>
   )

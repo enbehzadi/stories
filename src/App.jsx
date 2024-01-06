@@ -16,7 +16,7 @@ const welcome = {
 const App=()=> {
   const InitialStories = [
     {
-      id: "0",
+      id: "1",
       title: "React",
       url: "https://reactjs.org",
       author: "ahmadi",
@@ -24,7 +24,7 @@ const App=()=> {
       points: 9,
     },
     {
-      id: "1",
+      id: "2",
       title: "Redux",
       url: "https://Redux.js.org",
       author: "amiri",
