@@ -32,14 +32,27 @@ const App=()=> {
       points: 10,
     },
   ];
-  const [stories,setStories] =useState(InitialStories);
+  const [stories,setStories] =useState([]);
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const handlerSearch=(event)=>{
     console.log(event.target.value);
     setSearchTerm(event.target.value);
   }
   
-
+  const getAsyncStories=()=>new Promise (
+    resolve=>{
+      setTimeout(()=>{
+          resolve({data:{stories:InitialStories} });
+      },2000);
+     
+    });
+    useEffect(()=>{
+      getAsyncStories().then(
+        result=>{
+          setStories(result.data.stories);
+        }
+      )
+    },[])
   const handelRemoveStory=(id)=>{
     const newStories=stories.filter(story=>story.id!==id);
     setStories(newStories);
