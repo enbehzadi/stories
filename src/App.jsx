@@ -34,24 +34,30 @@ const App=()=> {
   ];
   const [stories,setStories] =useState([]);
   const [searchTerm,setSearchTerm] =useStorageState('search','');
+  const [isloading,setIsLoading]=useState(false);
+  const [isError,setIsError]=useState(false);
+
   const handlerSearch=(event)=>{
     console.log(event.target.value);
     setSearchTerm(event.target.value);
   }
   
-  const getAsyncStories=()=>new Promise (
-    resolve=>{
-      setTimeout(()=>{
-          resolve({data:{stories:InitialStories} });
-      },2000);
+  const getAsyncStories=()=>
+  new Promise ((resolve,reject)=>{
+    setTimeout(()=>{
+    reject();
+    },2000);
+  });
      
-    });
     useEffect(()=>{
+      setIsLoading(true);
+
       getAsyncStories().then(
         result=>{
           setStories(result.data.stories);
-        }
-      )
+          setIsLoading(false);
+
+        }).catch(()=>setIsError(true))
     },[])
   const handelRemoveStory=(id)=>{
     const newStories=stories.filter(story=>story.id!==id);
@@ -65,6 +71,9 @@ const App=()=> {
     story.title.includes(searchTerm));
 
     const inputRef=useRef();
+    // if(isloading){
+    //   return <p>Loading...</p>
+    // }
   return (
     <div>
       <h1>
@@ -73,7 +82,11 @@ const App=()=> {
       </h1>
       
       <InputWhitLable id="search"  label="Search"  Value={searchTerm} onInputChange={handlerSearch} isFocused={true}/>
-     <List list={searchedStories} onRemoveItem={handelRemoveStory} />
+      {isError && <p>something went wrong</p>}
+      {
+        isloading ? <p>isLoading</p>:     <List list={searchedStories} onRemoveItem={handelRemoveStory} />
+
+      }
     </div>
   );
 }
