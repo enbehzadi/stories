@@ -68,14 +68,14 @@ const App=()=> {
   //       }).catch(()=>dispatchStories({type:'STORIES_FETCH_FAILURE'}));
 
   //   },[])
-  // const handelRemoveStory=(id)=>{
-  //   dispatchStories({type:'REMOVE_STORIES',payload:id})
-  //   // const newStories=stories.filter(story=>story.id!==id);
-  //   // // setStories(newStories);
+  const handelRemoveStory=(id)=>{
+    dispatchStories({type:'REMOVE_STORIES',payload:id})
+    // const newStories=stories.filter(story=>story.id!==id);
+    // // setStories(newStories);
 
-  //   // dispatchStories({type:'SET_STORIES',payload:new stories});
+    // dispatchStories({type:'SET_STORIES',payload:new stories});
 
-  // }
+  }
   useEffect(() => {
     dispatchStories({type:'STORIES_FETCH_INIT'});
     fetch(API_ENDPOINT).then(responce=>responce.json()).
