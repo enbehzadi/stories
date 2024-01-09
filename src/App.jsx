@@ -32,11 +32,11 @@ const App=()=> {
       points: 10,
     },
   ];
-  const [stories,setStories] =useState([]);
+  // const [stories,setStories] =useState([]);
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const [isloading,setIsLoading]=useState(false);
   const [isError,setIsError]=useState(false);
-
+  const [stories,dispatchStories]=useReducer(storiesReduser,[]);
   const handlerSearch=(event)=>{
     console.log(event.target.value);
     setSearchTerm(event.target.value);
@@ -45,7 +45,7 @@ const App=()=> {
   const getAsyncStories=()=>
   new Promise ((resolve,reject)=>{
     setTimeout(()=>{
-    reject();
+      resolve({data:{stories:InitialStories}});
     },2000);
   });
      
@@ -54,14 +54,19 @@ const App=()=> {
 
       getAsyncStories().then(
         result=>{
-          setStories(result.data.stories);
+          
+          dispatchStories({type:'SET_STORIES',payload:result.data.stories});
+          // setStories(result.data.stories);
           setIsLoading(false);
-
         }).catch(()=>setIsError(true))
     },[])
   const handelRemoveStory=(id)=>{
-    const newStories=stories.filter(story=>story.id!==id);
-    setStories(newStories);
+    dispatchStories({type:'REMOVE_STORY',payload:id})
+    // const newStories=stories.filter(story=>story.id!==id);
+    // // setStories(newStories);
+
+    // dispatchStories({type:'SET_STORIES',payload:new stories});
+
   }
   useEffect(() => {
     localStorage.setItem("search",searchTerm);
@@ -89,5 +94,18 @@ const App=()=> {
       }
     </div>
   );
+}
+const storiesReduser=(state,action)=>{
+    switch(action.type){
+      case 'SET_STORIES':
+        return action.payload;
+        break;
+        case 'REMOVE_STORIES':
+        return  stories.filter((story)=>story.id !==action.payload)
+        break;
+        default:
+          return state;
+          break; 
+    }
 }
 export default App;
