@@ -15,27 +15,28 @@ const welcome = {
 };
 const App=()=> {
   const InitialStories = [
-    {
-      id: "1",
-      title: "React",
-      url: "https://reactjs.org",
-      author: "ahmadi",
-      num_comments: 1,
-      points: 9,
-    },
-    {
-      id: "2",
-      title: "Redux",
-      url: "https://Redux.js.org",
-      author: "amiri",
-      num_comments: 2,
-      points: 10,
-    },
+    // {
+    //   id: "1",
+    //   title: "React",
+    //   url: "https://reactjs.org",
+    //   author: "ahmadi",
+    //   num_comments: 1,
+    //   points: 9,
+    // },
+    // {
+    //   id: "2",
+    //   title: "Redux",
+    //   url: "https://Redux.js.org",
+    //   author: "amiri",
+    //   num_comments: 2,
+    //   points: 10,
+    // },
   ];
   // const [stories,setStories] =useState([]);
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const [isloading,setIsLoading]=useState(false);
   const [isError,setIsError]=useState(false);
+  const API_ENDPOINT='react-mini-projects-api.classbon.com/Story/list';
   const [stories,dispatchStories]=useReducer(storiesReduser,
     {
       data:[],isloading:false,isError:false
@@ -53,32 +54,41 @@ const App=()=> {
     },2000);
   });
      
-    useEffect(()=>{
-      setIsLoading(true);
+  //   useEffect(()=>{
+  //     setIsLoading(true);
 
-      getAsyncStories().then(
-        result=>{
+  //     getAsyncStories().then(
+  //       result=>{
           
-         // dispatchStories({type:'SET_STORIES',payload:result.data.stories});
-              dispatchStories({type:'STORIES_FETCH_SUCCESS',payload:result.data.stories});
+  //        // dispatchStories({type:'SET_STORIES',payload:result.data.stories});
+  //             dispatchStories({type:'STORIES_FETCH_SUCCESS',payload:result.data.stories});
 
-          // setStories(result.data.stories);
-          //setIsLoading(false);
-        }).catch(()=>dispatchStories({type:'STORIES_FETCH_FAILURE'}));
+  //         // setStories(result.data.stories);
+  //         //setIsLoading(false);
+  //       }).catch(()=>dispatchStories({type:'STORIES_FETCH_FAILURE'}));
 
-    },[])
-  const handelRemoveStory=(id)=>{
-    dispatchStories({type:'REMOVE_STORIES',payload:id})
-    // const newStories=stories.filter(story=>story.id!==id);
-    // // setStories(newStories);
+  //   },[])
+  // const handelRemoveStory=(id)=>{
+  //   dispatchStories({type:'REMOVE_STORIES',payload:id})
+  //   // const newStories=stories.filter(story=>story.id!==id);
+  //   // // setStories(newStories);
 
-    // dispatchStories({type:'SET_STORIES',payload:new stories});
+  //   // dispatchStories({type:'SET_STORIES',payload:new stories});
 
-  }
+  // }
   useEffect(() => {
     dispatchStories({type:'STORIES_FETCH_INIT'});
-    localStorage.setItem("search",searchTerm);
-  }, [searchTerm])
+    fetch(API_ENDPOINT).then(responce=>responce.json()).
+    then().then((stories)=>{
+        dispatchStories({
+          type:"STORIES_FETCH_SUCCESS",
+          payload:stories,
+        })
+    }).catch(()=>dispatchStories({type:'STORIES_FETCH_FAILURE'}));
+    // localStorage.setItem("search",searchTerm);
+  }, [
+    // searchTerm
+  ])
 
   const searchedStories=stories.data.filter((story)=>
     story.title.includes(searchTerm));
