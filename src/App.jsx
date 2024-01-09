@@ -36,7 +36,10 @@ const App=()=> {
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const [isloading,setIsLoading]=useState(false);
   const [isError,setIsError]=useState(false);
-  const [stories,dispatchStories]=useReducer(storiesReduser,[]);
+  const [stories,dispatchStories]=useReducer(storiesReduser,
+    {
+      data:[],isloading:false,isError:false
+    });
   const handlerSearch=(event)=>{
     console.log(event.target.value);
     setSearchTerm(event.target.value);
@@ -45,7 +48,8 @@ const App=()=> {
   const getAsyncStories=()=>
   new Promise ((resolve,reject)=>{
     setTimeout(()=>{
-      resolve({data:{stories:InitialStories}});
+       resolve({data:{stories:InitialStories}});
+      // reject();
     },2000);
   });
      
@@ -55,13 +59,16 @@ const App=()=> {
       getAsyncStories().then(
         result=>{
           
-          dispatchStories({type:'SET_STORIES',payload:result.data.stories});
+         // dispatchStories({type:'SET_STORIES',payload:result.data.stories});
+              dispatchStories({type:'STORIES_FETCH_SUCCESS',payload:result.data.stories});
+
           // setStories(result.data.stories);
-          setIsLoading(false);
-        }).catch(()=>setIsError(true))
+          //setIsLoading(false);
+        }).catch(()=>dispatchStories({type:'STORIES_FETCH_FAILURE'}));
+
     },[])
   const handelRemoveStory=(id)=>{
-    dispatchStories({type:'REMOVE_STORY',payload:id})
+    dispatchStories({type:'REMOVE_STORIES',payload:id})
     // const newStories=stories.filter(story=>story.id!==id);
     // // setStories(newStories);
 
@@ -69,10 +76,11 @@ const App=()=> {
 
   }
   useEffect(() => {
+    dispatchStories({type:'STORIES_FETCH_INIT'});
     localStorage.setItem("search",searchTerm);
   }, [searchTerm])
 
-  const searchedStories=stories.filter((story)=>
+  const searchedStories=stories.data.filter((story)=>
     story.title.includes(searchTerm));
 
     const inputRef=useRef();
@@ -87,9 +95,10 @@ const App=()=> {
       </h1>
       
       <InputWhitLable id="search"  label="Search"  Value={searchTerm} onInputChange={handlerSearch} isFocused={true}/>
-      {isError && <p>something went wrong</p>}
+
+      {stories.isError && <p>something went wrong</p>}
       {
-        isloading ? <p>isLoading</p>:     <List list={searchedStories} onRemoveItem={handelRemoveStory} />
+        stories.isloading ? <p>isLoading</p>:     <List list={searchedStories} onRemoveItem={handelRemoveStory} />
 
       }
     </div>
@@ -97,11 +106,33 @@ const App=()=> {
 }
 const storiesReduser=(state,action)=>{
     switch(action.type){
-      case 'SET_STORIES':
-        return action.payload;
-        break;
-        case 'REMOVE_STORIES':
-        return  stories.filter((story)=>story.id !==action.payload)
+      case 'STORIES_FETCH_INIT':
+        return{
+          ...state,
+          isloading:true,
+          isError:false
+        }
+        case 'STORIES_FETCH_SUCCESS':
+          return{
+            ...state,
+            isloading:false,
+            isError:false,
+            data:action.payload
+          } 
+
+          case 'STORIES_FETCH_FAILURE':
+            return{
+              ...state,
+              isloading:false,
+              isError:true,
+            } 
+   
+            case 'REMOVE_STORIES':
+              return{
+                ...state,
+                data:state.data.filter((story)=>story.id!==action.payload)
+              }
+            
         break;
         default:
           return state;
