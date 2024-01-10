@@ -2,12 +2,9 @@ import Search from "./components/InputWhitLable";
 import List from "./components/List";
 import Item from "./components/Item";
 import { useRef, useState } from "react";
-
 import { createContext, useEffect, useContext, useReducer } from 'react';
-
 import useStorageState from "./hooks/useStorageState";
 import InputWhitLable from "./components/InputWhitLable";
-
 const title = "Hello Programmer";
 const welcome = {
   greeting: "hi",
