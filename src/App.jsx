@@ -36,7 +36,7 @@ const App=()=> {
   const [searchTerm,setSearchTerm] =useStorageState('search','');
   const [isloading,setIsLoading]=useState(false);
   const [isError,setIsError]=useState(false);
-  const API_ENDPOINT='react-mini-projects-api.classbon.com/Story/list';
+  const API_ENDPOINT='https://gorest.co.in/public/v2/users';
   const [stories,dispatchStories]=useReducer(storiesReduser,
     {
       data:[],isloading:false,isError:false
@@ -54,27 +54,9 @@ const App=()=> {
     },2000);
   });
      
-  //   useEffect(()=>{
-  //     setIsLoading(true);
 
-  //     getAsyncStories().then(
-  //       result=>{
-          
-  //        // dispatchStories({type:'SET_STORIES',payload:result.data.stories});
-  //             dispatchStories({type:'STORIES_FETCH_SUCCESS',payload:result.data.stories});
-
-  //         // setStories(result.data.stories);
-  //         //setIsLoading(false);
-  //       }).catch(()=>dispatchStories({type:'STORIES_FETCH_FAILURE'}));
-
-  //   },[])
   const handelRemoveStory=(id)=>{
     dispatchStories({type:'REMOVE_STORIES',payload:id})
-    // const newStories=stories.filter(story=>story.id!==id);
-    // // setStories(newStories);
-
-    // dispatchStories({type:'SET_STORIES',payload:new stories});
-
   }
   useEffect(() => {
     dispatchStories({type:'STORIES_FETCH_INIT'});
@@ -91,8 +73,7 @@ const App=()=> {
   ])
 
   const searchedStories=stories.data.filter((story)=>
-    story.title.includes(searchTerm));
-
+    story.name.includes(searchTerm));
     const inputRef=useRef();
     // if(isloading){
     //   return <p>Loading...</p>
@@ -101,7 +82,7 @@ const App=()=> {
     <div>
       <h1>
         {welcome.greeting}
-        {welcome.title}
+        {welcome.name}
       </h1>
       
       <InputWhitLable id="search"  label="Search"  Value={searchTerm} onInputChange={handlerSearch} isFocused={true}/>

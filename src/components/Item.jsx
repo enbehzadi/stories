@@ -1,23 +1,23 @@
-const Item=({id,title,url,author,num_comments,points,onRemoveItem})=>{
+const Item=({id,name,email,gender,status,onRemoveItem})=>{
   // console.log(id);
 const onDelete=()=>{
-  // console.log(id);
-  onRemoveItem(id)
+  console.log(id);
+  onRemoveItem(id);
 }
   return(
     <li>
+      <span>
+         {id}
+        </span>
         <span>
-          <a href={url}>{title}</a>
+          <a href={email}>{name}</a>
         </span>
        
         <span>
-         {author}
+         {gender}
         </span>
         <span>
-         {num_comments}
-        </span>
-        <span>
-         {points}
+         {status}
         </span> 
         <button onClick={onDelete}>Remove</button>
 </li>
